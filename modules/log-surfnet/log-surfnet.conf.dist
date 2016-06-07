@@ -1,0 +1,51 @@
+log-surfnet
+{
+	server 	"127.0.0.1"; // must be ip
+	user	"user";
+	pass	"pass";
+	db	"idsserver";
+	
+	options ""; // sslmode=required for example if you want to use ssl 
+
+
+
+	/* mode: 
+	 *	* any means log accepted connections on _all_ ports
+	 * 	* list means, use the port list 
+	 */
+	 
+	mode 	"any"; 
+	
+
+        ports   (
+                "21",
+		"25",
+                "42",
+                "80",
+                "110",
+                "135",
+                "139",
+                "143",
+                "220",
+                "445",
+                "465",
+                "993",
+                "995",
+                "1023",
+                "1025",
+                "1434",
+                "2103",
+                "2105",
+                "2107",
+                "2745",
+                "3127",
+                "3140",
+                "5000",
+                "5554",
+                "6129",
+                "10000",
+                "17300",
+                "27347");
+
+};
+

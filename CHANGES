@@ -1,0 +1,893 @@
+Version 0.2.2
+==================
+
+This release has been overdue for a long time.
+It should compile using g++4.2 (and automake 1.10).
+
+Nepenthes
+        FIXES and ADDITIONS
+	-----
+	* DownloadManager
+		* 0.0.0.0 is local
+		* if replace_local_ips is not set, local downloads will be dropped
+
+	* SocketManager
+		*  adding sockets during send or recv increases the .size() of m_Sockets, 
+		   therefore the pollfd set is read beyond its borders, prevent this
+
+	
+Modules
+        FIXES and ADDITIONS
+        -----
+	* submit-norman
+		* submit to cwsandbox too, add a new config var urls, 
+		  which is a list of urls to post to
+
+	* download-ftp
+		* big endian fixes (rui)
+
+	* shellcode-signatures
+		* sparc64 fixes (rui
+
+
+	* log-prelude
+		* various fixes (yoann)
+
+	* sqlhandler-postgres
+		* support options
+
+
+	* submit-norman
+		* use captchaless url
+
+
+	* log-surfnet
+		* prevent attack insert failures from messing up following attacks using the same socket ptr
+		* update attack severity for delayed attacks
+		* erase closed sockets from the socket tracker if there is no outstanding query to process
+
+	* download-curl
+		* new curl api
+
+        NEW
+        ---
+	* vuln-sav
+		* added
+
+	* log-hexdump
+		* added, external module now
+		* compile with --enable-debug-logging and load loghexdump.so
+
+
+	* sumbit-mwserv
+		* added (oxff)
+
+
+
+	* submit-http
+		* added (Niklas Schiffler)
+
+
+	* module-honeytrap
+		* added
+
+Version 0.2.0
+==================
+
+Indepent from the codebase, we cleaned up the compile process, 
+now every module is linked only on the libraries it relies on.
+
+
+Nepenthes
+        FIXES and ADDITIONS
+	-----
+	* Nepenthes 
+		* check for nepenthes in signal handler before logging
+		* dont handle SIGUSR1/2
+		* create LogManager in constructor, so we can use it right from the beginning to the bitter end
+		* added mips & arm to MY_ARCHES
+		* handle SIGCHLD & SIGPIPE
+		* add -D daemonize flag for start as daemon
+		* use proper types for uid/gid
+		* dont change user/group if not necessary
+		* clean up startup code
+
+	* GeoLocationManager
+        	* removed
+
+	* UploadManager
+        	* removed
+
+
+	* LogManager 
+		* clear() loggers on destruction
+                * check for registerd loggers before logging, if no handlers re registerd, log using printf
+
+	* Socket
+		* allow hw address lookup using /proc/net/arp in Socket::getRemoteHWA(string *address)
+	
+	* UDPSocket
+		* fix source based routing for udp, bind local address for connect' connections
+		* memset() our sockaddr_in before we use em
+
+	* TCPSocket
+		* add event on binding a port
+                * memset() our sockaddr_in before we use em
+
+
+	* SQLManager
+		* added
+
+	* ModuleManager
+		* unload modules in reverse order
+
+	* LogHandler
+		* added setOwnership()
+
+	* LogManager
+		* added bool LogManager::delLogger(LogHandler *lh), return true on success, false else
+
+ 
+Modules
+        FIXES and ADDITIONS
+        -----
+	* shellcode-signatures
+		* changed the build process to use the yacc & flex files
+		* fix bug in sch_namespace_base64, credits go to Nelson William for pointing this out
+
+	* log-prelude
+		* fixes & classification changes by Harald Lampesberger
+		* should produce valid idmef now
+
+	* vuln-bagle
+		* fixed endless loop on closed connection
+
+	* vuln-mydoom
+		* fixed endless loop on closed connection
+
+
+	* log-irc
+		* can set filters now
+		* use LogManager::delLogger(LogHandler *lh) on ::Exit
+
+	* shellemu-winnt
+		* improve ftp.exe commandline parsing
+		  problem was, when the host/anonymous flag was specified on the command line, 
+		  after the script
+
+
+	* log-surfnet
+		* log remote mac address to table if its availible
+		* use sqlhandler-postgres, to offer autoreconnect etc etc etc
+
+	* download-ftp
+		* workaround problems with PORTs command where the virus would parse the wrong port
+
+	* download-creceive
+		* fix a bug where the downloads source is equal to the downloads destionation
+
+	
+	* vuln-mydoom
+		* fix destionation ip
+		* proper url
+
+	* submit-norman
+		* submit to cwsandbox too, add a new config var urls, 
+		  which is a list of urls to post to
+
+        NEW
+        ---
+	* vuln-realvnc 
+		* handles alphanumeric keystrokes
+		* clipboard actions
+
+	* module-honeytrap
+		* idea is taken from honeytrap.sf.net by Werner Tillmann
+		* detect incoming connections using pcap/ipq/ipfw
+		* bind unbound ports
+		* create a mirror connection between to the attacker to "emulate" the vuln using the attackers own weakness
+		* able to log incoming connections as pcap files
+
+	* module-bridge
+		* basic exploit & command detection to the accept() Dialogue,
+		* handle recognized attacks, downloads what has to be downloaded
+
+
+	* sqlhandler-postgres
+		* can use domains
+		* nonblocking, even in conjunction with domains
+		* autoreconnect
+
+	* x-9
+		* example on the sqlmanager/handler
+
+
+	* submit-postgres
+		* submit samples & context information to a postgres database
+		* requires the sqlhandler-postgres
+		* compatible to libpq 7.4 and 8.x
+		* spooling with bencoded files
+
+
+	* module-peiros
+		* 'construction site'
+
+
+	GONE WITH THE WIND
+	------------------
+	*
+		* geolocation-*
+		* x-8 (geolocation example)
+		* upload-http
+		* submit-xmlrpc
+
+
+
+
+Version 0.1.7
+==================
+
+
+
+Nepenthes
+        FIXES and ADDITIONS
+        -----
+        * Nepenthes
+                * default install wont spam the console, use --enable-debug-logging if you want the console spam pary
+                * --version dumps information about operating system
+                * --help is better
+                * log exit reason to file
+                * prevent crash on startup when running in changeroot
+                  without changing process user and/or group id, -> changeroot _after_ we
+                  chowned the logfiles
+                * support for linux capabilities
+
+
+        * SocketManager
+                * support for if:ethN for default bind address by interface
+                * removed RAWSocket
+
+        * GeolocatioManager
+                * add return value in Exit()
+
+        * UploadHandler
+                * g++ 4.1 fixes
+
+        * DownloadHandler
+                * g++ 4.1 fixes
+
+        * ModuleManager
+                * use dlopen() with RTLD_LOCAL, osx has RTLD_GLOBAL as default and
+                  segfaults therefore when unloading modules
+
+
+
+Modules
+        FIXES and ADDITIONS
+        -----
+        * vuln-ftpd
+                * can handle NAT for active ftp
+
+        * vuln-kuang
+                * log remote ip, not local ip
+
+        * x-6
+                * free the mallocs
+
+        * module-portwatch
+                * removed port 21 from portwatch list
+                * added 25 to portwatch list
+
+        * shellcode-generic
+                * detect wget in xmlrpc exploit attempts
+
+        * log-irc
+                * send irc server pass
+                * infinite retries to resolve server/tor domain
+
+        * x-7
+                * dropped
+
+        * dnsresolve-adns
+                * g++ 4.1 fixes
+
+        * submit-norman
+                * g++ 4.1 fixes
+
+        * download-curl
+                * g++ 4.1 fixes
+
+        * vuln-netdde
+                * removed shellcodehandler, moved to shellcode-signatures
+
+        * vuln-msmq
+                * removed shellcodehandler, moved to shellcode-signatures
+
+        * vuln-dcom
+                * removed shellcodehandler, moved to shellcode-signatures
+
+        * vuln-asn1
+                * removed shellcodehandler, moved to shellcode-signatures
+
+        * vuln-sasserftpd
+                * removed shellcodehandler, moved to shellcode-signatures
+
+        * vuln-wins
+                * removed shellcodehandler, moved to shellcode-signatures
+
+        * vuln-iis
+                * removed shellcodehandler, moved to shellcode-signatures
+
+        * vuln-lsass
+                * removed shellcodehandler, moved to shellcode-signatures
+
+
+        * vuln-mydoom
+                * use CL_ASSIGN_AND_DONE when done (for log-surfnet)
+
+        * vuln-bagle
+                * use CL_ASSIGN_AND_DONE when done (for log-surfnet)
+
+
+        NEW
+        ---
+        * submit-gotek
+		* submit files to the mwcollect alliance via the gotek 1 protocol
+		
+        * log-prelude
+                * fixed by Harald Lampesberger
+
+        * vuln-ftpd
+		* emulation for various bugs in windows ftp daemons
+                * contributed by Harald Lampesberger
+
+
+        * shellcode-signatures
+                * ported almost _all_ shellcodes from shellcode-generic
+
+
+
+
+
+
+Version 0.1.6
+=============
+
+
+We made sure the source compiles on
+  * cygwin
+  * linux (tested debian on x86, fedora core 3 on amd64, suse 9 enterprise server on powerpc)
+  * openbsd (tested on openbsd 3.8 on x86)
+  * netbsd (tested on netbsd 2.0.2 on x86)
+
+For cygwin we had to cast many int32_t to int, and many int32_t * to int too (104 times)... and include sys/socket.h (26 times)
+OpenBSD enforced including sys/types.h nearly everywhere (37 times)
+64bit fedora made us use intptr_t instead of int to point to memory (19 times)
+
+The other focus was adding some new shellcode handlers, 
+and we added a new download handler for the broken by design rcp protocol
+
+
+Nepenthes
+	FIXES and ADDITIONS
+	-----
+	* DownloadManager
+		* as long as BIG_ENDIAN is not coverd by  autoconf, dont rely it on here.
+
+	* UploadManager 
+		* fixed includes
+	* DNSManager 
+		* errno fix
+	
+	* DownloadUrl
+		* fixed inclues	
+	
+	* Buffer 
+		* casting int for amd64	
+
+	* Nepenthes
+		* getopt int casting
+		* no logfiles chown own cygwin
+		* no filetype on cygwin, dont rely on it 
+		* cygwin needs int main()
+		* no signals for cygwin (yet)
+		
+	* SocketManager
+		* interface to request tcp connect sockets with provided local port ( for download-rcp )
+	* TCPSocket 
+		* new constructor for connect sockets which allows setting a local port
+		
+	
+Modules
+	FIXES and ADDITIONS
+	-----
+	* many modules
+		* fixed wrong module names/descriptions
+	
+	* shellcode-generic (picchio contributed the analysis for them, we are really glad about his work)
+		* added sch_generic_winexec
+		* pinnebergConnect added
+		* sch_generic_xor schoenberg xor added
+		* schoenenberg bind added
+		* ravensburg bind added
+		* rosengarten xor added
+		* schauenburg bind added
+		* schauenburg xor added
+		* leimbach xor family added
+		* lichtenfels xor & connectback
+		
+	* submit-xmlrpc
+		* using geolocation submit-xmlrpc resolved the locals geolocation, 
+		  now we resolve the remotes
+		  
+	* log-irc 
+		* channel pass fix
+		* upon request - reply nepenthes version to !version
+		
+	* shellemu-winnt
+		* added VFSCommandRCP for rcp.exe
+		
+		  
+	NEW
+	---
+	* download-rcp
+		* created, downloads files via the undocumented rcp protcoll
+
+
+
+
+
+
+Version 0.1.5
+=============
+Bugfix release/minor features.
+
+
+Nepenthes
+	FIXES and ADDITIONS
+	-----
+	* none
+	
+	
+	
+
+Modules
+	FIXES and ADDITIONS
+	-----
+	* shellcode-generic
+		* sch_generic_cmd added \r\n as lineterminator
+		* shellcode-generic.conf.dist langenfeldConnect pcre added
+		* sch_generic_xor 
+			* deggendorf & langenfeld xor added, 
+			* removed possible off by n <=3 byte in the 4 byte xor
+
+	
+	* vuln-dcom
+		* made it less aggressive, if it does not look like dcom, dont handle it
+		
+
+	* shellemu-winnt
+		* VFSCommandSTART added
+		* VFSCommandTFTP proper var checks added
+		* added handling of the escape var ^ for the shell
+		* VFSCommandFTP can download >1 file per batch now 
+		* VFSCommandFTP can handle "cd" now
+		
+	* download-http
+		* handle downloads with 0 byte bodysize as broken
+		
+	* download-ftp 
+		* can send CWD now
+		* fixed missing \r on sending RETR
+		
+	* geolocation-hostip
+		* the address to look the address up changed, so we adjusted it
+		
+
+	* geolocation-ip2location
+		* tarball lacked config file
+
+
+	NEW
+	---
+	* vuln-msdtc
+		* emulation for the ms05-051 exploit by swan
+		
+
+Version 0.1.4
+=============
+Bugfix release/minor features.
+
+Nepenthes
+	FIXES and ADDITIONS
+	-----
+	* FileLogger logged to somewhere after config file was deleted as he lacked a valid path
+
+
+Modules
+	FIXES and ADDITIONS
+	-----
+	* download-nepenthes 
+		* NULL pointer bug fixed
+	  
+	* shellcode-generic 
+		* rewrapped xor code, 
+		* added some bindshell codes
+			* parthenstein
+			* wackerow
+			* kaltenborn
+	  
+	* geolocation-ip2location 
+		* now makes use of the real ip2location c api you can download on their homepage, 
+		  setting the lib up sucks, but it works
+	  
+	* log-surfnet
+		* moduledescription changed, as we log to postgres, not to mysql
+	   
+	* dnsresolve-adns 
+		* added modulename and description
+		
+
+
+
+Version 0.1.3
+=============
+Bugfix release/minor features.
+FIXME
+
+* fixed some g++ 3.2 include issues
+
+
+* Autoconf
+	* improved configure.ac
+		* added --enable-* to configure
+			* geolocation is optional
+		* dump ./configure configuration to stdout
+
+
+
+* Nepenthes core
+
+			
+
+	* DownloadManager & Download & DownloadCallback
+		* changed structure so we can specify a DownloadCallback for internal downloads
+			* intrested in a downloads result, ask the downloadmanager to download it, provide a DownloadCallback
+			  the DownloadManager will pass the information encapsulated in a Download to its DownloadHandler
+			  the DownloadHandler will try to download it and pass the Download as result to the DownloadCallback
+			  
+			  
+
+
+
+	* DNSManager DNSQuery DNSHandler DNSResult DNSCallback
+		* made DNSResolver Service modular, only module so far availible is dnsresolve-adns
+		* now modules providing resolver capabilties are now called 'DNSHandler'
+		  anything which is intrested in its dns resolution result is a DNSCallback now
+		  (before there was no DNSCallback, no modularity, and we called classes intrested in DNS DNSHandler)
+			* intrested in resolving some domain, ask the DNSManager and provide a DNSCallback
+			  the DNSManager will form a DNSQuery from the request, pass it to its DNSHandler
+			  the DNSHandler will try to resolve the domain and pass result as a  DNSResult to the 
+			  DNSCallback
+		  
+	* Event 
+		* use uint8_t as Eventid instead of event_type
+		* added ShellcodeEvent & DialogueEvent 
+
+
+	* EventManager
+		* allow internal Event registration
+
+
+	* GeoLocationManager GeoLocationQuery GeoLocationHandler GeoLocationResult GeoLocationCallback 
+        	* created
+			* GeoLocationHandler register with the GeoLocationManager
+			* intrested in GeoLocation lookups, ask the GeoLocationManager and provide a GeoLocationCallback
+			  the GeoLocationManager will form a GeoLocationQuery from the request, pass it to its GeoLocationHandler
+			  the GeoLocationHandler will try to resolve it and pass the GeoLocationResult to the GeoLocationCallback
+		* added caching of results
+		
+
+
+	* LogManager
+		* filelogger is the default logger again, so logrotate can do its job
+		* force ringbuffer logger usage with -R
+		
+
+	* log-ringbuffer
+		* added
+		  stop wasting diskspace with logs
+		* sets correct permissions on destination files
+		* uses path to log to from nepenthes.logmanager.ring_logger_file
+		
+
+	* log-file
+		* uses path to log to from nepenthes.logmanager.file_logger_file
+
+
+	* Nepenthes
+		* improved the init, better errorhandling
+		* -f can do dirs
+
+
+	* ShellcodeManager
+		* hooks a ShellcodeEvent on success
+		
+
+	
+	* SocketManager TCPSocket UDPSocket RAWSocketListener
+		* decreased poll timeout
+		* moved ports to uint16_t
+		* use nepenthes.socketmanager.bind_address instead of binding INADDR_ANY for bind & connect
+			(suggested by Michael H. Warfield)
+			
+
+	* TCPSocket
+		* hooks a DialogueEvent on success
+
+		
+		
+	* UploadManager UploadQuery UploadHandler UploadResult UploadCallback 
+		* created
+			* intrested in uploading something to somewhere, ask the UploadManager and provide a UploadCallback
+			  the UploadManager will form a UploadQuery from the request, pass it to its UploadHandler
+			  the UploadHandler will try to upload the data it and pass reply to the UploadResult to the 
+			  UploadCallback
+
+
+	
+	* Utilities
+		* added escapeXMLString(char *)
+		
+	
+
+* Modules
+	FIXES and ADDITIONS
+	-----
+	* shellemu-winnt 
+		* fixed sending shell header on accept shells
+		* VFSCommandFTP handle -A flag for anonymous logins
+		* fixed crash with -f flag for checking dumps
+		* batch file handling 
+		
+	
+	* vuln-mssql 
+		* fixed tcp socket instead of udp
+	
+	
+	* download-ftp
+		* fixed quiting loop
+
+	* dnsmanager, dnsquery, dnsresult
+		* TXT record added
+	
+
+	* x-2 
+		* fix memleak
+
+	* x-5
+		* now registers its own event to show hiw this works
+		
+
+	* x-6 
+		* 'txt <domain>' will resolve the txt record now
+		
+
+	* submit-xmlrpc
+		* can use geolocation services now
+		* fixes some xml parsing
+		
+
+	* download-ftp 
+		* send LOGIN after 220 Welcome
+		
+
+	* download-curl
+		* add internal download capabilities
+		
+
+	* shellcode-generic
+		* sch_generic_link_xor
+			* improve bad length handling
+		* added adenau xor
+		* added adenau connectback
+		* added unicode decoder
+		* sch_generic_url 
+			* added - to allowed chars 
+			
+
+	NEW
+	---
+
+	* dnsresolve-adns
+		* made it a module
+		* fixes some memoryleaks we saw before
+	
+	* download-http
+		* written as download-curl replacement
+		
+	* geolocation-hostip
+		* resolve geolocations via hostip.info
+		
+	* geolocation-geoip
+		* resolve geolocations via maxminds geoip library
+		
+	* geolocation-ip2location
+		* resolve geolocations via maxminds geoip library
+
+	* log-surfnet
+		* log to surfnet ids database
+		  http://ids.surfnet.nl
+		  
+
+	* vuln-ssh 
+		* created, 
+		* works for ssh logins, fails for ssh worms :\
+
+	* x-8 
+		* added example how to use geolocation services
+
+
+* Other
+	* phpxmlrpc_server
+		* added
+		
+	* doxygen docu
+		* added
+		
+
+
+Version 0.1.2
+=============
+Bugfix release/minor features.
+
+* Utilities
+	* hexdump uses nepenthes.utilites.hexdump_path as pathinfo now
+	
+* shellemu-wint
+	* VFSCommandFTP uses new DownloadFlags
+
+* Download 
+	* added DownloadFlags so we can handle broken ftpds better
+	* added ::addFlag(uint8_t ) & ::getFlags()
+
+* DownloadManager 
+	* download() now takes uint8_t downloadflags as argument
+
+* download-ftp
+	* bind to port 0 to avoid collision
+	* rewrote quite everything to handle broken ftp daemons better, including the new DownloadFlags
+
+* Socket
+	* changed SS_NULL to SS_CONNECTED
+	* added SS_CONNECTING
+
+	
+* TCPSocket 
+	* set localip on accept() Sockets, so we can use this info further
+	* bind ConnectSockets before connecting, so we use the same ip for reverseconnect shells
+	* uses SS_CONNECTING for connect sockets
+	* overloads setState(), so if they are in state SS_CONNECTING and goto SS_CONNECTED they 
+		can call Dialogue::connectionEstablished() for their dialogues
+
+	* some changes in the TCPSockets internal Dialogue handling prevent nepenthes recognizing 
+		the same shellcode in more than one dialogue, resulting in more than one download per exploit
+		
+		
+* vuln-dameware
+	* created
+	
+* Dialogue
+	* added ::dump()
+	* added ::connectionEstablished()
+
+	
+* many vuln-* modules
+	* added CL_ASSIGN_AND_DONE handling
+
+
+* many shellcodehandlers using downloadhandler
+	* added valid downloadflag usage
+
+
+
+Version 0.1.1
+=============
+Bugfix release/minor features.
+
+This is the first release featuring auto(conf|make|broken|whatever) support.
+Maximillian Dornseif had enough time to burn to write configure.whatever 
+and such stuff for everything so far.
+
+
+* Compile fixes for 
+	* Mac OSX	
+	* FreeBSD
+
+* Nepenthes
+	* Added functionality for -d and -l command line options (log filtering).
+	* Handle SIGINT on -f (command line) usage.
+	* -V is now version.
+	* -v is now verbose, useful for -f when debugging new shellcodehandlers.
+	* DownloadBuffer now features cutFront(unsigned int len)
+
+* Veritas Backup Exec Exploit for port 10000 added.
+	* shellcode-generic
+		* Konstanz XOR added as sch_generic_konstanz_xor.
+		* Konstanz connectback shell pattern added to shellcode-generic.conf.dist.
+	* Removed VERITASDialogue for port 10000 hexdump, added shellcodehandling.
+
+
+* shellcode-generic
+	* Fixed sch_generic_connect.
+	* Added sch_generic_connect_trans and Halle PCRE.
+	* Added sch_generic_xor Halle.
+
+* vuln-dcom
+	* Fixed oc192 PCRE.
+	* Removed SOL2k shellcode handler, as they were never seen during the last two months.
+
+* download-csend
+	* the atoi(url->path) is cut from the download buffer to be able to use csend with halle
+	
+* vuln-iis 
+	* Handle NULL if binding the socket fails in a useful manner
+	
+* vuln-pnp
+	* added
+	* handles the MS05-039 exploit by houseofdabus
+	
+* vuln-lsass 
+	* fixed some lines to work properly with vuln-pnp
+
+* Utilities
+	* sha512 added
+	
+* shellemu-wint
+	* VFSCommandCMD
+	the first command after the /c has to be readded to the StdIn queue, like we did before,
+	but we have to add a delimiter '&' so we dont break our own parsing.
+
+* Download 
+	* added SHA512 get & set methods
+
+* SubmitManager 
+	* set SHA512 for downloads
+
+* tools/rpcxmlxfer
+	* there is an early implementation of an central collection and
+	logging protocol called rpcxmlxfer in this release. The prototype is
+	implemented as an external script. Just add something like
+          */5 * * * * nobody /opt/nepenthes/bin/rpcxmlxfer-client -q
+	to your /etc/crontab to try it.
+
+* download-ftp
+	* bind to port 0 to avoid collision
+
+* Socket
+	* changed SS_NULL to SS_CONNECTED
+	* added SS_CONNECTING
+	
+* TCPSocket 
+	* set localip on accept() Sockets, so we can use this info further
+	* bind ConnectSockets before connecting, so we use the same ip for reverseconnect shells
+	* uses SS_CONNECTING for connect sockets
+	* overloads setState(), so if they are in state SS_CONNECTING and goto SS_CONNECTED they 
+		can call Dialogue::connectionEstablished() for their dialogues
+		
+
+* submit-xmlrpc
+	* created
+	* depends on vuln-lsass 
+	
+* vuln-dameware
+	* created
+	
+* Dialogue
+	* added dump()
+	* added connectionEstablished
+
+
+Version 0.1.0
+=============
+Initial release.

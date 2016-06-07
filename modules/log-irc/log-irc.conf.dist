@@ -1,0 +1,39 @@
+log-irc
+{
+    use-tor     "1";
+    tor
+    {
+        server  "localhost";
+        port    "9050";
+    };
+
+    irc
+    {
+        server
+        {
+            name    "irc.freenode.net";
+            port    "6667";
+            pass    "";
+        };
+
+        user
+        {
+            nick        "nep-noname";
+            ident       "nepenthes";
+            userinfo    "http://nepenthes.mwcollect.org/";
+            usermodes   "+i";
+        };
+
+        channel
+        {
+            name    "#nepenthesirc";
+            pass    "foo";
+        };
+        
+        // has to be one IRC command NOT terminated with \r\n
+        // connect-command = "PRIVMSG NickServ :IDENTIFY mypassword";
+        
+        // set the initial log tag pattern, like on cmdline; defaults sane
+        // pattern = "crit,warn,down";
+    };
+};
